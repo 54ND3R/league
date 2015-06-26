@@ -6,7 +6,7 @@ class Match extends Generic{
     $matches=[];
     foreach ($match_history as $array_index => $array) {
       foreach($array as $entry){
-        $matches[$entry->matchId]=$this->get_match($entry->matchId);
+        $matches[$entry->matchId]=$this->get_match($entry["matchId"]);
         break;
       }
     }
