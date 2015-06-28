@@ -44,7 +44,7 @@ class Service {
     $name = "Dunks R Us";
     $matches = $this->get_lastest_matches($name);
 
-    $_SESSION['matches'] = json_encode($matches);
+    $_SESSION['matches'] = json_encode($matches["matches"]);
 
     //plugins_url("/League")
     wp_enqueue_script( 'latest_games', plugins_url(plugin_basename(__DIR__)). '/scripts/latest_games.js.php');
