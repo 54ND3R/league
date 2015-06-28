@@ -21,10 +21,13 @@ class Service {
     $this->rep_match_history=new Repos\Matchhistory();
     $this->rep_match=new Repos\Match();
   }
-  private function load(){
-  }
-  function register_shortcodes(){
 
+  private function load(){
+    if( !session_id() )
+        session_start();
+  }
+  private function register_shortcodes(){
+    add_shortcode( "latest_games" , array( $this , "display_latest_games" ) );
   }
 
   private $champions;
@@ -35,6 +38,16 @@ class Service {
 
   function get_static_data(){
     //$champions = get_champions();
+  }
+  //Shortcode
+  function display_latest_games($atts) {
+    $name = "Dunks R Us";
+    $matches = $this->get_lastest_matches($name);
+
+    $_SESSION['matches'] = json_encode($matches);
+
+    //plugins_url("/League")
+    wp_enqueue_script( 'latest_games', plugins_url(plugin_basename(__DIR__)). '/scripts/latest_games.js.php');
   }
   //Summoner Repository
 
@@ -49,7 +62,6 @@ class Service {
   public function get_lastest_matches($name) {
     $summoner = $this->rep_summoner->get_summoner_by_name($name)[str_simple($name)];
     $match_history = $this->rep_match_history->get_match_history($summoner["id"]);
-    $last_matches = $this->rep_match->get_matches_from_history($match_history);
     return $match_history;
   }
 
