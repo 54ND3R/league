@@ -9,19 +9,30 @@ Author URI: none
 License: GPL by default. Wordpress users may only edit direct wordpress code and solid deriatives...
 Text Domain: League
 */
+
+
+
 require "autoload.php";
 $service = new Service();
 
 class Service {
   public function __construct(){
-    $this->load();
-    $this->register_shortcodes();
     $this->rep_league=new Repos\League();
     $this->rep_summoner=new Repos\Summoner();
     $this->rep_match_history=new Repos\Matchhistory();
     $this->rep_match=new Repos\Match();
-  }
+    $this->init();
 
+  }
+  private function init(){
+    if(isset($_POST["load_match"])) {
+      $match_details = $this->get_match_details($_POST["load_match"]["matchId"]);
+      echo json_encode($match_details);
+    }else{
+      $this->load();
+      $this->register_shortcodes();
+    }
+  }
   private function load(){
     if( !session_id() )
         session_start();
@@ -41,13 +52,15 @@ class Service {
   }
   //Shortcode
   function display_latest_games($atts) {
+    echo "<div id='display_latest_games'></div>";
     $name = "Dunks R Us";
     $matches = $this->get_lastest_matches($name);
-
     $_SESSION['matches'] = json_encode($matches["matches"]);
-
-    //plugins_url("/League")
-    wp_enqueue_script( 'latest_games', plugins_url(plugin_basename(__DIR__)). '/scripts/latest_games.js.php');
+    $_SESSION['plugin_url']=plugins_url(plugin_basename(__DIR__));
+    //display
+    $plugin_url =  plugins_url(plugin_basename(__DIR__));
+    wp_enqueue_style( 'latest_games', $plugin_url.'/Stylesheets/latest_games.css' );
+    wp_enqueue_script( 'latest_games', $plugin_url. '/Scripts/latest_games.js.php');
   }
   //Summoner Repository
 
@@ -66,13 +79,22 @@ class Service {
   }
 
   //Match Repository
-
+  public function get_match_details($match_id) {
+    $match = $this->rep_match->get_match($match_id);
+    return $match;
+  }
   //Staticdata Repository
   function get_champions() {
     $url = "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion?dataById=true&champData=all&api_key=".$APIKEY;
     $champions = json_decode(file_get_contents($url));
   }
 
+}
+//Ajax
+function receive_post(){
+  if(isset($_POST["load_match"])){
+    include "/Ajax/latest_games.php";
+  }
 }
 
 //Misc

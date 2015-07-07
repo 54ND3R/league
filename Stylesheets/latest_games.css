@@ -1,0 +1,51 @@
+#league_match{
+  width:600px;
+  height:200px;
+  border:1px solid #000;
+}
+#league_match > #league_title{
+  text-align:center;
+  font-size:18pt;
+}
+#league_match > div > .league_team{
+  float:left;
+  width:50%;
+  font-size:10pt;
+}
+#league_match > div > .league_team > #league_champion{
+  padding:0 10px;
+  clear:both;
+}
+#league_match > div > div > div > #league_portrait,#league_summoners,#league_stats,#league_items{
+  float:left;
+}
+#league_match > div > div > div > #league_summoners img{
+  display:block;
+}
+#league_match > div > div > div >  #league_stats{
+  width:180px;
+}
+#league_match > div > div > div > div > .champicon{
+  width:30px;
+  height:30px;
+  margin:0;
+  padding:0;
+}
+#league_match > div > div > div > div > .champsum{
+  width:15px;
+  height:15px;
+  margin:0;
+  padding:0;
+}
+#league_match > div > div > div > div > .item{
+  display:block;
+  float:left;
+  width:15px;
+  height:15px;
+  margin:0;
+  padding:0;
+}
+#league_match > div > div > div > #league_items{
+  width:45px;
+  height:30px;
+}
