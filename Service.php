@@ -21,11 +21,15 @@ class Service {
     $this->rep_summoner=new Repos\Summoner();
     $this->rep_match_history=new Repos\Matchhistory();
     $this->rep_match=new Repos\Match();
+    $this->rep_data=new Repos\Data();
     $this->init();
 
   }
   private function init(){
     if(isset($_POST["load_match"])) {
+      $this->rep_data=new Repos\Data();
+      $this->champions=$this->rep_data->get_champions()["data"];
+
       $match_details = $this->get_match_details($_POST["load_match"]["matchId"]);
       echo json_encode($match_details);
     }else{
@@ -36,6 +40,7 @@ class Service {
   private function load(){
     if( !session_id() )
         session_start();
+    $this->champions=$this->rep_data->get_champions()["data"];
   }
   private function register_shortcodes(){
     add_shortcode( "latest_games" , array( $this , "display_latest_games" ) );
@@ -46,6 +51,7 @@ class Service {
   private $rep_league;
   private $rep_match_history;
   private $rep_match;
+  private $rep_data;
 
   function get_static_data(){
     //$champions = get_champions();
@@ -81,6 +87,10 @@ class Service {
   //Match Repository
   public function get_match_details($match_id) {
     $match = $this->rep_match->get_match($match_id);
+    foreach($match->participants as $participant){
+      $participant->championId=$this->champions[$participant->championId];
+
+    }
     return $match;
   }
   //Staticdata Repository

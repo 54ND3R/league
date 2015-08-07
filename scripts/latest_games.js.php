@@ -1,8 +1,6 @@
 
-//I have all the matches , I do not need all the details instantly we can load them one by one
-<?php
+//I have all the matches , I do not need all the details instantly so I load them one by one
 
-?>
 $(function(){
   <?php
   if( !session_id() )
@@ -29,6 +27,7 @@ function load_match(match){
   });
 }
 function match_loaded(match){
+  console.log(match);
   var container = $('#display_latest_games');
   var league_match =
   '<div id="league_match">'+
@@ -53,7 +52,7 @@ function match_loaded(match){
                '<img src="http://ddragon.leagueoflegends.com/cdn/5.2.1/img/spell/SummonerExhaust.png" class="champsum">'+
              '</div>'+
              '<div id="league_stats">'+
-               '<div>Dunks R Us - Aatrox</div>'+
+               '<div>Dunks R Us - '+participant["champion_name"]+'</div>'+
                '<div>KDA '+participant["stats"]["kills"]+'/'+participant["stats"]["deaths"]+'/'+participant["stats"]["assists"]+' </div>'+
              '</div>'+
              '<div id="league_items">'+
